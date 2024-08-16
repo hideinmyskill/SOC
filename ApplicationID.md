@@ -137,6 +137,9 @@
 | Vortex [wsfed enabled] |	5572c4c0-d078-44ce-b81c-6cbf8d3ed39e |
 | Kronos | 6eec4fdd-bbd5-42cd-b167-586f70013397 |
 | Microsoft Authenticator App | 4813382a-8fa7-425e-ab75-3b753aab3abb |
+| Microsoft Edge | ecd6b820-32c2-49b6-98a6-444530e5a77a | 
+
+
 
 
 
