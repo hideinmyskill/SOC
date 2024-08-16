@@ -138,6 +138,22 @@
 | Kronos | 6eec4fdd-bbd5-42cd-b167-586f70013397 |
 | Microsoft Authenticator App | 4813382a-8fa7-425e-ab75-3b753aab3abb |
 | Microsoft Edge | ecd6b820-32c2-49b6-98a6-444530e5a77a | 
+| Microsoft Edge Enterprise New Tab Page | d7b530a4-7680-4c23-a8bf-c52c121d2e87 | 
+| Microsoft Application Command Service | 6f7e0f60-9401-4f5b-98e2-cf15bd5fd5e3 | 
+| Microsoft 365 App Catalog Services | e8be65d6-d430-4289-a665-51bf2a194bda |
+| Augmentation Loop | 4354e225-50c9-4423-9ece-2d5afd904870 |
+| FXIrisClient | 4b0964e4-58f1-47f4-a552-e2e1fc56dcd7 | 
+| Cloud Data Store Client | 6afb4e1e-9ffa-4a21-8f59-c3ee04301388 | 
+| Graph Files Manager | 52c2e0b5-c7b6-4d11-a89c-21e42bcec444 | 
+| Accounts Control UI | a40d7d7d-59aa-447e-a655-679a4107e548 | 
+| My Apps | 2793995e-0a7d-40d7-bd35-6968ba142197 | 
+| Apple Internet Accounts | f8d98a96-0999-43f5-8af3-69971c7bb423 | 
+| Azure Virtual Desktop Client | a85cf173-4192-42f8-81fa-777a763e6e2c | 
+| BESTmedBCP | 479ecf06-4500-44ad-83e5-893f1aa33032 | 
+| OneDrive | b26aadf8-566f-4478-926f-589f601d9c74 | 
+
+
+
 
 
 
