@@ -1,4 +1,4 @@
-## This is a collection of Application ID to help With analysis
+## This is a collection of Application ID to help with log analysis
 ----------------------------------------------------------------
 
 
