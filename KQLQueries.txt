@@ -1,0 +1,283 @@
+KQL Queries
+
+-------------------------
+#Search Operation
+
+search "err"
+search in (SecurityEvent,SecurityAlert,A*) "err"
+-------------------------------------
+#Where operator
+
+SecurityEvent
+| where TimeGenerated > ago(1d)
+
+SecurityEvent
+| where TimeGenerated > ago(1h) and EventID == "4624"
+
+SecurityEvent
+| where TimeGenerated > ago(1h)
+| where EventID == 4624
+| where AccountType =~ "user"
+
+SecurityEvent | where EventID in (4624, 4625)
+--------------------------------------------------
+#Let statement:
+
+let timeOffset = 7d;
+let discardEventId = 4688;
+SecurityEvent
+| where TimeGenerated > ago(timeOffset*2) and TimeGenerated < ago(timeOffset)
+| where EventID != discardEventId
+
+#Dynamic tables or list
+
+let suspiciousAccounts = datatable(account: string) [
+    @"\administrator", 
+    @"NT AUTHORITY\SYSTEM"
+];
+SecurityEvent | where Account in (suspiciousAccounts)
+
+#another one
+
+let LowActivityAccounts =
+    SecurityEvent 
+    | summarize cnt = count() by Account 
+    | where cnt < 1000;
+LowActivityAccounts | where Account contains "SQL"
+-------------------------------------------------
+#extend operator
+
+SecurityEvent
+| where ProcessName != "" and Process != ""
+| extend StartDir =  substring(ProcessName,0, string_size(ProcessName)-string_size(Process))
+
+-----------------------------------------------------
+#order by operator
+SecurityEvent
+| where ProcessName != "" and Process != ""
+| extend StartDir =  substring(ProcessName,0, string_size(ProcessName)-string_size(Process))
+| order by StartDir desc, Process asc
+---------------------------------------------------
+#project operators
+Operator	Description
+project		Select the columns to include, rename or drop, and insert new computed columns.
+project-away	Select what columns from the input to exclude from the output.
+project-keep	Select what columns from the input to keep in the output.
+project-rename	Select the columns to rename in the resulting output.
+project-reorder	Set the column order in the resulting output.
+
+#another project operator
+SecurityEvent
+| project Computer, Account
+
+
+SecurityEvent
+| where ProcessName != "" and Process != ""
+| extend StartDir =  substring(ProcessName,0, string_size(ProcessName)-string_size(Process))
+| order by StartDir desc, Process asc
+| project Process, StartDir
+
+#project-away operator
+SecurityEvent
+| where ProcessName != "" and Process != ""
+| extend StartDir =  substring(ProcessName,0, string_size(ProcessName)-string_size(Process))
+| order by StartDir desc, Process asc
+| project-away ProcessName
+-----------------------------------------------------
+# Summarize Operator
+
+SecurityEvent | summarize by Activity
+
+SecurityEvent
+| where EventID == "4688"
+| summarize count() by Process, Computer
+
+#functions
+Function(s)			Description
+count(), countif()		Returns a count of the records per summarization group
+dcount(), dcountif()		Returns an estimate for the number of distinct values taken by a scalar expression in the summary group.
+avg(), avgif()			Calculates the average of Expr across the group.
+max(), maxif()			Returns the maximum value across the group.
+min(), minif()			Returns the minimum value across the group.
+percentile()			Returns an estimate for the specified nearest-rank percentile of the population defined by Expr. The accuracy depends on the density of population in the region of the percentile.
+stdev(), stdevif()		Calculates the standard deviation of Expr across the group, considering the group as a sample.
+sum(), sumif()			Calculates the sum of Expr across the group.
+variance(), varianceif()	Calculates the variance of Expr across the group, considering the group as a sample.
+
+#count function example
+SecurityEvent
+| where TimeGenerated > ago(1h)
+| where EventID == 4624
+| summarize cnt=count() by AccountType, Computer
+
+#dcount
+SecurityEvent
+| summarize dcount(IpAddress)
+
+#real world example
+let timeframe = 30d;
+let threshold = 1;
+SigninLogs
+| where TimeGenerated >= ago(timeframe)
+| where ResultDescription has "Invalid password"
+| summarize applicationCount = dcount(AppDisplayName) by UserPrincipalName, IPAddress
+| where applicationCount >= threshold
+
+#arg_max function
+SecurityEvent 
+| where Computer == "SQL10.na.contosohotels.com"
+| summarize arg_max(TimeGenerated,*) by Computer
+
+
+#arg_min function
+SecurityEvent 
+| where Computer == "SQL10.na.contosohotels.com"
+| summarize arg_min(TimeGenerated,*) by Computer
+
+
+#revisit result pipe
+// Statement 1
+
+SecurityEvent
+| summarize arg_max(TimeGenerated, *) by Account
+| where EventID == "4624"
+
+// Statement 2
+
+SecurityEvent
+| where EventID == "4624"
+| summarize arg_max(TimeGenerated, *) by Account
+
+#make_list Function
+SecurityEvent
+| where EventID == "4624"
+| summarize make_list(Account) by Computer
+
+#make_set function
+SecurityEvent
+| where EventID == "4624"
+| summarize make_set(Account) by Computer
+---------------------------------------------
+#render operator to create visualisations
+SecurityEvent 
+| summarize count() by Account
+| render barchart
+
+
+#use the summarize operator to create time series
+SecurityEvent 
+| summarize count() by bin(TimeGenerated, 1d) 
+| render timechart
+--------------------------------------
+#Union Operator
+// Query 1 - Query 1 returns all rows of SecurityEvent and all rows of SigninLogs
+
+SecurityEvent 
+| union SigninLogs  
+
+// Query 2 - Query 2 returns one row and column, which is the count of all rows of SecurityEvent and all rows of SigninLogs
+
+SecurityEvent 
+| union SigninLogs  
+| summarize count() 
+| project count_
+
+// Query 3 - Query 3 returns all rows of SecurityEvent and one row for SigninLogs.
+
+SecurityEvent 
+| union (SigninLogs | summarize count()| project count_)
+
+#The union operator supports wildcards to union multiple tables. The following KQL creates a count for the rows in all tables with names that start with Security.
+union Security* 
+| summarize count() by Type
+
+---------------------------------------------
+#join Operator
+#Syntax
+#LeftTable | join [JoinParameters] ( RightTable ) on Attributes
+
+SecurityEvent 
+| where EventID == "4624" 
+| summarize LogOnCount=count() by EventID, Account 
+| project LogOnCount, Account 
+| join kind = inner (
+     SecurityEvent 
+     | where EventID == "4634" 
+     | summarize LogOffCount=count() by EventID, Account 
+     | project LogOffCount, Account 
+) on Account
+#description: The first table specified in the join is considered the Left table. The table after the join keyword is the right table. The columns from the tables are designated, the $left.Column and the $right.Column to distinguish which tables columns you're referencing.
+
+#kind functions
+Join Flavor	                                                Output Records
+kind=leftanti, kind=leftantisemi	                          Returns all the records from the left side that don't have matches from the right
+kind=rightanti, kind=rightantisemi	                        Returns all the records from the right side that don't have matches from the left.
+kind unspecified, kind=innerunique	                        Only one row from the left side is matched for each value of the on key. The output contains a row for each match of this row with rows from the right
+kind=leftsemi	                                              Returns all the records from the left side that have matches from the right.
+kind=rightsemi	                                            Returns all the records from the right side that have matches from the left.
+kind=inner	                                                Contains a row in the output for every combination of matching rows from left and right.
+kind=leftouter (or kind=rightouter or kind=fullouter)	      Contains a row for every row on the left and right, even if it has no match. The unmatched output cells contain nulls.
+
+---------------------------------------------------
+
+#Extract data from unstructured string fields
+#extract - Extract gets a match for a regular expression from a text string. You may optionally convert the extracted substring to the indicated type.
+print extract("x=([0-9.]+)", 1, "hello x=45.6|wo") == "45.6"
+
+#Arguments
+regex: A regular expression.
+captureGroup: A positive int constant indicating the capture group to extract. A "0" stands for the entire match, a "1" for the value matched by the first '('parenthesis')' in the regular expression, 2 or more for subsequent parentheses.
+text: A string to search.
+typeLiteral: An optional type literal (for example, typeof(long)). If provided, the extracted substring is converted to this type.
+
+#The following example uses the extract function to pull out the Account Name from the Account field of the SecurityEvent table.
+SecurityEvent
+| where EventID == 4672 and AccountType == 'User'
+| extend Account_Name = extract(@"^(.*\\)?([^@]*)(@.*)?$", 2, tolower(Account))
+| summarize LoginCount = count() by Account_Name
+| where Account_Name != ""
+| where LoginCount < 10
+
+----------------------------------------------
+#Dynamic Fields
+#To access the strings within a Dynamic field, use the dot notation. The DeviceDetail field from the SigninLogs table is of type dynamic. In this example, you could access the Operating System with the DeviceDetail.operatingSystem field name.
+SigninLogs 
+| extend OS = DeviceDetail.operatingSystem
+
+
+#The query example below shows the use of Dynamic fields with the SigninLogs table.
+// Example query for SigninLogs showing how to break out packed fields.
+
+SigninLogs 
+| extend OS = DeviceDetail.operatingSystem, Browser = DeviceDetail.browser 
+| extend StatusCode = tostring(Status.errorCode), StatusDetails = tostring(Status.additionalDetails) 
+| extend Date = startofday(TimeGenerated) 
+| summarize count() by Date, Identity, UserDisplayName, UserPrincipalName, IPAddress, ResultType, ResultDescription, StatusCode, StatusDetails 
+| sort by Date
+
+#json
+#KQL provides functions to manipulate JSON stored in string fields. Many logs submit data in JSON format, which requires you to know how to transform JSON data to queryable fields.
+SigninLogs 
+| extend AuthDetails =  parse_json(AuthenticationDetails) 
+| extend AuthMethod =  AuthDetails[0].authenticationMethod 
+| extend AuthResult = AuthDetails[0].["authenticationStepResultDetail"] 
+| project AuthMethod, AuthResult, AuthDetails 
+
+
+SigninLogs 
+| mv-expand AuthDetails = parse_json(AuthenticationDetails) 
+| project AuthDetails
+
+SigninLogs 
+| mv-apply AuthDetails = parse_json(AuthenticationDetails) on
+(where AuthDetails.authenticationMethod == "Password")
+-------------------------------------------------
+
+
+
+
+
+
+
+
+
