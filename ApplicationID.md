@@ -156,7 +156,36 @@
 | Azure Active Directory Powershell | 1b730954-1685-4b74-9bfd-dac224a7b894 |
 | One Outlook Web | 9199bf20-a13f-4107-85dc-02114787ef48 |
 | Microsoft Azure CLI | 04b07795-8ddb-461a-bbee-02f9e1bf7b46 |
-
+| Olympus | bb893c22-978d-4cd4-a6f7-bb6cc0d6e6ce |
+| OneDrive iOS App | af124e86-4e96-495a-b70a-90f90ab96707 | 
+| OneDriveLTI | 4f547b5f-c3f7-4d2c-a14f-0f8f1286d7d5 |
+| OneLTI | d3ee6f25-becc-4659-9bc6-bbe6af7d18e6 |
+| Partner Customer Delegated Admin Migration | b39d63e7-7fa3-4b2b-94ea-ee256fdb8c2f |
+| Partner Customer Delegated Administration | 2832473f-ec63-45fb-976f-5d45a7d4bb91 |
+| PartnerCenterCustomerServiceAppProd | 34cabb34-90ae-4aca-b8c3-c457dbedf145 | 
+| Policy Processor | 1b489150-9b00-413a-83fd-6ef8f05b6e28 |
+| Power BI Desktop | 7f67af8a-fedc-4b08-8b4e-37c4d127b6cf |
+| Power Platform Admin Center | 065d9450-1e87-434e-ac2f-69af271549ed |
+| Power Platform Governance Services – TIRPS | 2b5e68f0-bdc2-45b0-920a-217d5cbbd505 |
+| Power Platform Insights and Recommendations Prod | 6b650392-d446-472e-a422-e47047790237 |
+| Power Virtual Agents Service | 9d8f559b-5984-46a4-902a-ad4271e83efa |
+| PowerApps | 4e291c71-d680-4d0e-9640-0a3358e31177 |
+| PowerApps – apps.powerapps.com | 3e62f81e-590b-425b-9531-cad6683656cf |
+| ProductsLifecycleApp | c09dc6d6-3bff-482b-8e40-68b3ad65f3fa |
+| PTSS | 9f6c88b7-0272-4581-a75a-ec0340824ed1 |
+| Purview Ecosystem | 9ec59623-ce40-4dc8-a635-ed0275b5d58a |
+| Reading Assignments | 22d27567-b3f0-4dc2-9ec2-46ed368ba538 |
+| Report Message | 6046742c-3aee-485e-a4ac-92ab7199db2e |
+| Scheduling | ae8e128e-080f-4086-b0e3-4c19301ada69 |
+| SEAL All credentials | 38df11dd-582e-4207-be6f-b214675f44a1 | 
+| SEAL SNI | c10f411a-874c-485c-9d66-6e0b34202c41 |
+| SharePoint | d326c1ce-6cc6-4de2-bebc-4591e5e13ef0 |
+| SharePoint Android | f05ff7c9-f75a-4acd-a3b5-f4b6a870245d |
+| SharePoint Online Client Extensibility | c58637bb-e2e1-4312-8a00-04b5ffcd3403 |
+| Skype Core Calling Service | 66c23536-2118-49d3-bc66-54730b057680 |
+| Skype For Business Entitlement | ef4c7f67-65bd-4506-8179-5ddcc5509aeb |
+| SSO Extension Intune | 163b648b-025e-455b-9937-a7f39a65d171 |
+| Teams CMD Services Artifacts | 6bc3b958-689b-49f5-9006-36d165f30e00 |
 
 
 
