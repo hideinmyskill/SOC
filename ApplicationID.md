@@ -153,6 +153,7 @@
 | OneDrive | b26aadf8-566f-4478-926f-589f601d9c74 | 
 | Outlook Web App Widgets | 87223343-80b1-4097-be13-2332ffa1d666 |
 | Culture Amp Conversations | b7e63e1c-5565-4500-a2f3-fa0056f27359 |
+| Azure Active Directory Powershell | 1b730954-1685-4b74-9bfd-dac224a7b894 |
 
 
 
