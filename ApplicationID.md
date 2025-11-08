@@ -154,7 +154,8 @@
 | Outlook Web App Widgets | 87223343-80b1-4097-be13-2332ffa1d666 |
 | Culture Amp Conversations | b7e63e1c-5565-4500-a2f3-fa0056f27359 |
 | Azure Active Directory Powershell | 1b730954-1685-4b74-9bfd-dac224a7b894 |
-
+| One Outlook Web | 9199bf20-a13f-4107-85dc-02114787ef48 |
+| Microsoft Azure CLI | 04b07795-8ddb-461a-bbee-02f9e1bf7b46 |
 
 
 
